@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import { AppContext } from '../context/AppContext';
 import Feedback from '../components/Feedback';
+import axios from 'axios';
 
 const pointsTable = [
   [0, 1, 3], // Questão 1
@@ -18,7 +19,29 @@ const pointsTable = [
 
 const ResultScreen = () => {
   const { answers, resetAnswers } = useContext(AppContext);
-  
+
+  const handleSave = async () => {
+    try {
+      const response = await axios.post('http://192.168.0.66:9082/questionario', {
+        q1: answers[0],
+        q2: answers[1],
+        q3: answers[2],
+        q4: answers[3],
+        q5: answers[4],
+        q6: answers[5],
+        q7: answers[6],
+        q8: answers[7],
+        q9: answers[8],
+        q10: answers[9],
+      }, {
+        timeout: 50000 // 20 segundos
+      });
+      console.log('Dados salvos:', response.data);
+    } catch (error) {
+      console.error('Erro ao salvar os dados:', error);
+    }
+  };
+
   useEffect(() => {
     return () => resetAnswers();
   }, []);
@@ -37,6 +60,10 @@ const ResultScreen = () => {
     <View style={styles.container}>
       <Text style={styles.scoreText}>Sua Pontuação: {score}</Text>
       <Feedback score={score} />
+      <Button
+        title='Gravar questões'
+        onPress={handleSave}
+      />
     </View>
   );
 };
