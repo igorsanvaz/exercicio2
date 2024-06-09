@@ -22,7 +22,7 @@ const ResultScreen = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post('http://192.168.0.66:9082/questionario', {
+      const response = await axios.post('http://192.168.0.1:9082/questionario', {
         q1: answers[0],
         q2: answers[1],
         q3: answers[2],
